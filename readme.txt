@@ -1,0 +1,12 @@
+This application is using MERN Stack along with the following technolgies
+-Json Web Tokens(jwt) - for encrypting private routing
+-JWT decode - used for decoding token information
+-Mongoose, for handling server routing calls
+-Redux
+-Axios, for handling http requests and sending the required data to the correct route
+-classnames, allows classes to be added to bootstrap fields in react
+-redux 
+-redux-thunk, middleware to process ajax requests
+-Chrome extensions --redux-dev-tools, to display redux in the browser window while developing
+-react-moment -using to format dates (must also import base react moment module
+-heroku - used as the mounting application to push the app to production
