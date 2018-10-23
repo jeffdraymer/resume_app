@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 //Bringing in components to track if the user token is valid and set in local storage
 import jwt_decode from 'jwt-decode';
@@ -7,7 +7,7 @@ import setAuthToken from './utils/setAuthToken';
 import { setCurrentUser, logoutuser } from './actions/authActions';
 import { clearCurrentProfile } from './actions/profileActions';
 
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux';
 import store from './store';
 
 import PrivateRoute from './components/common/PrivateRoute';
@@ -29,18 +29,12 @@ import AddEducation from './components/add-credentials/AddEducation';
 import Profiles from './components/profiles/Profiles';
 import Profile from './components/profile/Profile';
 
-//Components for the post feature
-import Posts from './components/posts/Posts';
-import Post from './components/post/Post';
-
-
 //Styling components
 import "./App.css";
 
-
 //Check for token 
-if(localStorage.jwtToken){
-  
+if (localStorage.jwtToken) {
+
   //Set Auth token in header
   setAuthToken(localStorage.jwtToken);
   //decode token and get user info and experation
@@ -50,7 +44,7 @@ if(localStorage.jwtToken){
 
   //Check for expired token
   const currentTime = Date.now() / 1000;
-  if(decoded.exp < currentTime ){
+  if (decoded.exp < currentTime) {
     //Logout user
     store.dispatch(logoutuser());
     //Clear current profile
@@ -61,48 +55,41 @@ if(localStorage.jwtToken){
 
 }
 
-
 class App extends Component {
-  
+
   render() {
     return (
       <Provider store={store}>
-      <Router>
-        <div className="App">
-        <Navbar />
-          <Route exact path="/" component={Landing} />
-          <div className="container">
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/profiles" component={Profiles} />
-            <Route exact path="/profile/:handle" component={Profile} />
-            
-            <Switch>
-              <PrivateRoute exact path="/dashboard" component={Dashboard} /> 
-            </Switch>
-            <Switch>
-              <PrivateRoute exact path="/create-profile" component={CreateProfile} />
-            </Switch>
-            <Switch>
-              <PrivateRoute exact path="/edit-profile" component={EditProfile} />
-            </Switch>
-            <Switch>
-              <PrivateRoute exact path="/add-experience" component={AddExperience} />
-            </Switch>
-            <Switch>
-              <PrivateRoute exact path="/add-education" component={AddEducation} />
-            </Switch>
-            <Switch>
-              <PrivateRoute exact path="/feed" component={Posts} />
-            </Switch>
-            <Switch>
-              <PrivateRoute exact path="/post/:id" component={Post} />
-            </Switch>
-            <Route exact path="/not-found" component={NotFound} />
+        <Router>
+          <div className="App">
+            <Navbar />
+            <Route exact path="/" component={Landing} />
+            <div className="container">
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/profiles" component={Profiles} />
+              <Route exact path="/profile/:handle" component={Profile} />
+
+              <Switch>
+                <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/create-profile" component={CreateProfile} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/edit-profile" component={EditProfile} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/add-experience" component={AddExperience} />
+              </Switch>
+              <Switch>
+                <PrivateRoute exact path="/add-education" component={AddEducation} />
+              </Switch>
+              <Route exact path="/not-found" component={NotFound} />
+            </div>
+            <Footer />
           </div>
-          <Footer />  
-        </div>
-      </Router>
+        </Router>
       </Provider>
     );
   }

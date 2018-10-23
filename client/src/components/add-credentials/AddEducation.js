@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 //withRouter allows for the props.history value to be passed to the action
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import TextFieldGroup from '../common/TextFieldGroup';
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup';
 import { connect } from 'react-redux';
@@ -17,9 +17,9 @@ class AddEducation extends Component {
             fieldOfStudy: '',
             from: '',
             to: '',
-            current: false,
+            current: true,
             description: '',
-            disabled: false,
+            disabled: true,
             errors: {}
         }
         this.onChange = this.onChange.bind(this);
@@ -51,7 +51,7 @@ class AddEducation extends Component {
             description: this.state.description,
         };
 
-        this.props.addEducation(eduData, this.props.history);
+        this.props.addEducation(eduData);
     }
 
     onCheck(e) {
@@ -71,11 +71,6 @@ class AddEducation extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-8 m-auto">
-                            <Link to="/dashboard" className="btn btn-light">
-                                Go Back
-                              </Link>
-                            <h1 className="display-4 text-center">Add Education</h1>
-                            <p className="lead text-center">Any school which you have had attended in the past or are currently attending</p>
                             <small className="d-block pb-3">* = Required Fields</small>
                             <form onSubmit={this.onSubmit}>
                                 <TextFieldGroup
@@ -135,9 +130,9 @@ class AddEducation extends Component {
                                     value={this.state.description}
                                     onChange={this.onChange}
                                     error={errors.description}
-                                    info="Tell us about the program that you were in."                                    
+                                    info="Tell us about the program that you were in."
                                 />
-                                <input type="submit" value="Submit" className="btn btn-info btn-block mt-4" />
+                                <input type="submit" value="Submit" className="btn btn-info btn-block mt-4 mb-3" />
                             </form>
                         </div>
                     </div>

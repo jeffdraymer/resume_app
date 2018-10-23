@@ -19,12 +19,12 @@ class Education extends Component {
                 <td>{edu.certification}</td>
                 <td>{edu.fieldOfStudy}</td>
                 <td>
-
                     <Moment format="YYYY/MM/DD">{edu.from}</Moment> -
                   {/*If the To date was not specified then display Now else show the date*/}
                     {edu.to === null ? (' Present') : (<Moment format="YYYY/MM/DD">{edu.to}</Moment>)}
 
                 </td>
+                {/*<td> <button onClick={this.onEdit.bind(this.edu._id)} className="btn btn-info">Edit</button> </td>*/}
                 <td><button onClick={this.onDelete.bind(this, edu._id)} className="btn btn-danger">Delete</button></td>
             </tr>
         ));
@@ -54,7 +54,6 @@ Education.propTypes = {
 
 const mapDispatchToProps = {
     deleteEducation
-}
-
+};
 
 export default connect(null, mapDispatchToProps)(Education);

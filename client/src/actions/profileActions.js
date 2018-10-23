@@ -1,24 +1,31 @@
 import axios from 'axios';
 
-import { GET_PROFILE, PROFILE_LOADING, GET_ERRORS, CLEAR_CURRENT_PROFILE, SET_CURRENT_USER, GET_PROFILES } from './types';
+import {
+    GET_PROFILE,
+    PROFILE_LOADING,
+    GET_ERRORS,
+    CLEAR_CURRENT_PROFILE,
+    SET_CURRENT_USER,
+    GET_PROFILES
+} from './types';
 
 //Get current profile
 export const getCurrentProfile = () => dispatch => {
     dispatch(setProfileLoading());
     axios
         .get('/api/profile')
-        .then(res => 
+        .then(res =>
             //If the profile is found then return it
-        dispatch({
-            type: GET_PROFILE,
-            payload: res.data
-        }))
-        .catch(err => 
+            dispatch({
+                type: GET_PROFILE,
+                payload: res.data
+            }))
+        .catch(err =>
             //If the profile is not found then return empty object and prompt user to create profile
-        dispatch({
-            type: GET_PROFILE,
-            payload: {}
-        })
+            dispatch({
+                type: GET_PROFILE,
+                payload: {}
+            })
         );
 };
 
@@ -27,12 +34,12 @@ export const getProfileByHandle = (handle) => dispatch => {
     dispatch(setProfileLoading());
     axios
         .get(`/api/profile/handle/${handle}`)
-        .then(res => 
+        .then(res =>
             dispatch({
                 type: GET_PROFILE,
                 payload: res.data
             }))
-        .catch(err => 
+        .catch(err =>
             dispatch({
                 type: GET_PROFILE,
                 payload: null
@@ -40,16 +47,16 @@ export const getProfileByHandle = (handle) => dispatch => {
 };
 
 //Create new profile
-export const createProfile = (profileData, history) => dispatch => {    
-    axios  
+export const createProfile = (profileData, history) => dispatch => {
+    axios
         .post('/api/profile', profileData)
         .then(res => history.push('/dashboard'))
-        .catch(err => 
+        .catch(err =>
             dispatch({
                 type: GET_ERRORS,
                 payload: err.response.data
-        })
-    );
+            })
+        );
 };
 
 //Profile Loading 
@@ -82,10 +89,13 @@ export const getProfiles = () => dispatch => {
 };
 
 //Add Experience
-export const addExperience = (expData, history) => dispatch => {
-    axios 
+export const addExperience = (expData) => dispatch => {
+    axios
         .post('/api/profile/experience', expData)
-        .then(res => history.push('/dashboard'))
+        .then(res => dispatch({
+            type: GET_PROFILE,
+            payload: res.data
+        }))
         .catch(err => dispatch({
             type: GET_ERRORS,
             payload: err.response.data
@@ -93,10 +103,27 @@ export const addExperience = (expData, history) => dispatch => {
 };
 
 //Add Experience
-export const addEducation = (eduData, history) => dispatch => {
+export const addEducation = (eduData) => dispatch => {
     axios
         .post('/api/profile/education', eduData)
-        .then(res => history.push('/dashboard'))
+        .then(res => dispatch({
+            type: GET_PROFILE,
+            payload: res.data
+        }))
+        .catch(err => dispatch({
+            type: GET_ERRORS,
+            payload: err.response.data
+        }));
+};
+
+//Add Technology
+export const addTechnology = (techData) => dispatch => {
+    axios
+        .post('/api/profile/technology', techData)
+        .then(res => dispatch({
+            type: GET_PROFILE,
+            payload: res.data
+        }))
         .catch(err => dispatch({
             type: GET_ERRORS,
             payload: err.response.data
@@ -106,7 +133,7 @@ export const addEducation = (eduData, history) => dispatch => {
 
 //Delete Experience
 export const deleteExperience = (id) => dispatch => {
-    axios 
+    axios
         .delete(`/api/profile/experience/${id}`)
         .then(res => dispatch({
             type: GET_PROFILE,
@@ -132,10 +159,24 @@ export const deleteEducation = (id) => dispatch => {
         }));
 }
 
+//Delete Technology
+export const deleteTechnology = (id) => dispatch => {
+    axios
+        .delete(`/api/profile/technology/${id}`)
+        .then(res => dispatch({
+            type: GET_PROFILE,
+            payload: res.data
+        }))
+        .catch(err => dispatch({
+            type: GET_ERRORS,
+            payload: err.response.data
+        }));
+}
+
 //Delete Account
 export const deleteAccount = () => dispatch => {
-    if(window.confirm('Are you sure? This can NOT be undone!')){
-        axios   
+    if (window.confirm('Are you sure? This can NOT be undone!')) {
+        axios
             .delete('/api/profile')
             .then(res => dispatch({
                 type: SET_CURRENT_USER,
@@ -151,4 +192,3 @@ export const deleteAccount = () => dispatch => {
 
 
 
- 

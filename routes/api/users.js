@@ -34,10 +34,10 @@ router.post("/register", (req, res) => {
       //Check that the username does not already exist
       User.findOne({ email: req.body.email }).then(user => {
 
-        if(user){
+        if (user) {
           return res.status(400).json({ email: "Email already exists" });
-        } else{ 
-      
+        } else {
+
           //Using gravatar feature to display user avatar if available,
           //else set avatar to default image
           const avatar = gravatar.url(req.body.email, {
@@ -62,9 +62,9 @@ router.post("/register", (req, res) => {
                 .then(user => res.json(user))
                 .catch(err => console.log(err));
             });
-          }); 
-        }   
-     });
+          });
+        }
+      });
     }
   });
 });
@@ -76,7 +76,7 @@ router.post("/register", (req, res) => {
 router.post("/login", (req, res) => {
   //Validate user input
   const { errors, isValid } = validateLoginInput(req.body);
-  
+
 
   if (!isValid) {
     return res.status(400).json(errors);
@@ -89,7 +89,7 @@ router.post("/login", (req, res) => {
     //Check if a user was returned
     if (!user) {
       errors.email = "User was not found";
-      return res.status(404).json( errors );
+      return res.status(404).json(errors);
     }
     //Check passowrd
     bcrypt.compare(password, user.password).then(isMatch => {
@@ -101,14 +101,14 @@ router.post("/login", (req, res) => {
         jwt.sign(
           payload,
           keys.secretOrKey,
-          { expiresIn: 3600 },
+          { expiresIn: 36000 },
           (err, token) => {
             res.json({ success: true, token: "Bearer " + token });
           }
         );
       } else {
         errors.password = "Password is incorrect";
-        return res.status(400).json( errors );
+        return res.status(400).json(errors);
       }
     });
   });

@@ -7,7 +7,6 @@ const path = require('path');
 //Declaring Routes
 const users = require("./routes/api/users");
 const profile = require("./routes/api/profile");
-const posts = require("./routes/api/posts");
 
 const app = express();
 
@@ -29,14 +28,13 @@ app.use(passport.initialize());
 //Passport Config
 require("./config/passport")(passport);
 
-//Using routes
+//List all the route files which will be used 
 app.use("/api/users", users);
 app.use("/api/profile", profile);
-app.use("/api/posts", posts);
 
 //if none of the aboce routes are being hit
 // Serve static assests if in production
-if(process.env.NODE_ENV === 'production'){
+if (process.env.NODE_ENV === 'production') {
   //Set static folder 
   app.use(express.static('client/build'));
   //create route to navigate to prod folder

@@ -7,6 +7,7 @@ const passport = require("passport");
 const validateProfileInput = require("../../validation/profile");
 const validateExperienceInput = require("../../validation/experience");
 const validateEducationInput = require("../../validation/education");
+const validateTechnologyInput = require("../../validation/technology");
 
 //Load Profile model
 const Profile = require("../../models/Profile");
@@ -67,7 +68,7 @@ router.get("/all", (req, res) => {
 router.get("/handle/:handle", (req, res) => {
   const errors = {};
   Profile.findOne({ handle: req.params.handle })
-    .populate("user", ["user","name", "avatar"])
+    .populate("user", ["user", "name", "avatar"])
     .then(profile => {
       if (!profile) {
         errors.noprofile = "No profile found for this user";
@@ -115,8 +116,8 @@ router.post(
     if (!isValid) {
       console.log(errors);
       return res.status(400).json(errors);
-    }    
-    
+    }
+
     //Get profile fields
     const profileFields = {};
     //initialize oject for social media links
@@ -201,8 +202,8 @@ router.post(
   }
 );
 
-// @route POST /api/profile/experience
-// @desc Add the eduction section of the users profile
+// @route POST /api/profile/education
+// @desc Add the education section of the users profile
 // @access Private
 
 router.post(
@@ -210,7 +211,7 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const { errors, isValid } = validateEducationInput(req.body);
-
+    console.log("GotHere");
     if (!isValid) {
       return res.status(400).json(errors);
     }
@@ -229,7 +230,43 @@ router.post(
       profile.education.unshift(newEducation);
 
       profile.save().then(profile => res.json(profile));
+
     });
+  }
+);
+
+// @route POST /api/profile/technology
+// @desc Add to the technology section of the users profile
+// @access Private
+
+router.post(
+  "/technology", passport.authenticate("jwt", { session: false }), (req, res) => {
+    //Validate the data which was passed from the action
+
+    const { errors, isValid } = validateTechnologyInput(req.body);
+
+    //If data is not valid then return the errors object
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
+    //Search for profile in the DB
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+
+        //If the profile is returned then assign params to new object
+        const newTech = {
+          techName: req.body.techName,
+          level: req.body.level,
+          description: req.body.description
+        }
+        //Add new tech to the profile and then save to DB
+        profile.technology.unshift(newTech);
+        profile.save().then(profile => res.json(profile));
+
+      })
+      //catch any unexpected errors
+      .catch(err => res.status(500).json(err));
+
   }
 );
 
@@ -276,6 +313,28 @@ router.delete(
         profile.education.splice(removeIndex, 1);
 
         profile.save().then(profile => res.json(profile));
+      })
+      .catch(err => res.status(404).json(err));
+  }
+);
+
+// @route Delete /api/profile/education/:edu_id
+// @desc Remove the education section of the users profile
+// @access Private
+router.delete(
+  "/technology/:tech_id", passport.authenticate("jwt", { session: false }), (req, res) => {
+    Profile.findOne({ user: req.user.id })
+      .then(profile => {
+        //Search the tech array for the tech_id which is passed in and get the index for removal
+        const removeIndex = profile.technology
+          .map(tech => tech.id)
+          .indexOf(req.params.tech_id)
+
+        //Splice the found index out of the tech array
+        profile.technology.splice(removeIndex, 1);
+        //Save the updated profile to the DB and then return the profile to the action
+        profile.save().then(profile => res.json(profile))
+
       })
       .catch(err => res.status(404).json(err));
   }

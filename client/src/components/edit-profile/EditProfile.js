@@ -17,12 +17,12 @@ class EditProfile extends Component {
     constructor(props) {
         super();
         this.state = {
+            displaySocialInputs: false,
             handle: '',
             company: '',
             website: '',
             location: '',
             status: '',
-            skills: '',
             githubusername: '',
             bio: '',
             twitter: '',
@@ -44,11 +44,9 @@ class EditProfile extends Component {
         }
 
         //Get the profile state and then access the profile object which is contained inside
-        if(nextProps.profile.profile){
+        if (nextProps.profile.profile) {
             const profile = nextProps.profile.profile;
 
-            //Bring skills array back to comma seperated value
-            const skillsCSV = profile.skills.join(','); 
 
             //If profile field doesnt exist, make empty string
             profile.company = !isEmpty(profile.company) ? profile.company : '';
@@ -71,7 +69,6 @@ class EditProfile extends Component {
                 website: profile.website,
                 location: profile.location,
                 status: profile.status,
-                skills: skillsCSV,
                 githubusername: profile.githubusername,
                 bio: profile.bio,
                 twitter: profile.twitter,
@@ -80,11 +77,11 @@ class EditProfile extends Component {
                 youtube: profile.youtube,
                 instagram: profile.instagram
             })
-        }     
+        }
 
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.getCurrentProfile();
     }
 
@@ -97,7 +94,6 @@ class EditProfile extends Component {
             website: this.state.website,
             location: this.state.location,
             status: this.state.status,
-            skills: this.state.skills,
             githubusername: this.state.githubusername,
             bio: this.state.bio,
             twitter: this.state.twitter,
@@ -189,7 +185,7 @@ class EditProfile extends Component {
                                 Go Back
                               </Link>
                             <h1 className="display-4 text-center">Edit Your Profile</h1>
-                           
+
                             <small className="d-block pb-3">* = required fields</small>
                             <form onSubmit={this.onSubmit}></form>
                             <TextFieldGroup
@@ -234,14 +230,6 @@ class EditProfile extends Component {
                                 info="City & state/province (eg: Toronto, Ont)"
                             />
                             <TextFieldGroup
-                                placeholder="Skills"
-                                name="skills"
-                                value={this.state.skills}
-                                onChange={this.onChange}
-                                error={errors.skills}
-                                info="Please use comma to separate values (eg: HTML,CSS,Java)"
-                            />
-                            <TextFieldGroup
                                 placeholder="Github Username"
                                 name="githubusername"
                                 value={this.state.githubusername}
@@ -282,7 +270,7 @@ EditProfile.propTypes = {
     createProfile: PropTypes.func.isRequired,
     getCurrentProfile: PropTypes.func.isRequired,
     profile: PropTypes.object.isRequired,
-    errors: PropTypes.object.isRequired 
+    errors: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
@@ -291,7 +279,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-    createProfile, 
+    createProfile,
     getCurrentProfile
 }
 

@@ -6,7 +6,7 @@ const initialState = {
     loading: false //Will track if the data have been successfully retrieved from the DB
 }
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
     switch (action.type) {
         //Set loading value so that the Spinner component will run while the results are being fetched
         case PROFILE_LOADING:
@@ -29,7 +29,7 @@ export default function(state = initialState, action) {
             }
         //Returns all the profile objects which were found in the DB  
         case GET_PROFILES:
-            return{
+            return {
                 ...state,
                 profiles: action.payload,
                 loading: false
